@@ -1,11 +1,21 @@
 #!/usr/bin/python3
 
 import os
+import time
 import binascii
 import ecdsa
 import requests
 import hashlib
 import base58
+from bs4 import BeautifulSoup
+import json
+
+def get_balance(wallet_key):
+    url = f'https://blockchain.info/balance?active={wallet_key.decode()}'
+    response = requests.get(url)
+    data = json.loads(response.text)
+    final_balance = data.get(wallet_key.decode(), {}).get("final_balance", 0)
+    return final_balance
 
 # Generate Bitcoin wallet key
 def generate_btc_wallet_key():
@@ -28,20 +38,25 @@ def generate_btc_wallet_key():
     return wallet_key, binascii.hexlify(private_key).decode()
 
 # Set the file name for the output
-filename = "wallet_key_balance.txt"
+filename = "/home/kali-linux/Pulpit/Btc_miner/ByeBye-Bitcoin/wallet_key_balance.txt"
 
-while True:
-    # Generate a new wallet key and private key
-    wallet_key, private_key = generate_btc_wallet_key()
+try:
+    while True:
+        # Generate a new wallet key and private key
+        wallet_key, private_key = generate_btc_wallet_key()
 
-    # You need an API key to check balance from blockchain.com
-    url = f'https://api.blockchain.info/q/addressbalance/{wallet_key.decode()}'
-    response = requests.get(url)
-    balance = int(response.text)
+        print(f"Generated wallet key: {wallet_key.decode()}")  # Print the wallet key every time
 
-    # If balance is greater than zero, print and save to file
-    if balance > 0:
-        print(f"Wallet Key: {wallet_key}\nPrivate Key: {private_key}\nBalance: {balance} satoshi\n")
+        # Use the API to check the balance
+        final_balance = get_balance(wallet_key)
 
-        with open(filename, "a") as f:
-            f.write(f"Wallet Key: {wallet_key}\nPrivate Key: {private_key}\nBalance: {balance} satoshi\n")
+        # If the balance is greater than zero, print and save to file
+        if final_balance > 0:
+            print(f"Wallet Key: {wallet_key.decode()}\nPrivate Key: {private_key}\nBalance: {final_balance}\n")
+            with open(filename, "a") as f:
+                f.write(f"Wallet Key: {wallet_key.decode()}\nPrivate Key: {private_key}\nBalance: {final_balance}\n")
+
+        # Sleep for 60 seconds
+        time.sleep(10)
+except KeyboardInterrupt:
+    print("Program interrupted. Exiting...")
