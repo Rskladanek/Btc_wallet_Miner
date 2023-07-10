@@ -11,11 +11,11 @@ Install the required Python libraries if you haven't already done so:
 
 Copy code
 pip install ecdsa requests base58
+
 Clone this repository:
-bash
-Copy code
 git clone https://github.com/Rskladanek/Btc_wallet_Miner
+
 Run the script:
-Copy code
 python3 bitcoin_wallet_generator.py
+
 The script will run indefinitely, generating Bitcoin wallets and checking their balance on the Blockchain.com API. If it finds a wallet with a balance, it will print the wallet key and the balance to the console and write them to a file named wallet_key_balance.txt.
