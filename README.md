@@ -5,7 +5,7 @@ Disclaimer:
 Please do not use this script for illegal activities. It is illegal and unethical to try and access Bitcoin wallets that do not belong to you. This script is for educational purposes only, such as generating new wallets for yourself and checking their balances.
 
 Usage
-Make sure you have Python 3.6 or later installed. You can download it here.
+Make sure you have Python 3.6 or later installed.
 
 Install the required Python libraries if you haven't already done so:
 
