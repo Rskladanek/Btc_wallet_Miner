@@ -14,7 +14,7 @@ pip install ecdsa requests base58
 Clone this repository:
 bash
 Copy code
-git clone https://github.com/Rskladanek/bitcoin-wallet-generator.git
+git clone https://github.com/Rskladanek/Btc_wallet_Miner
 Run the script:
 Copy code
 python3 bitcoin_wallet_generator.py
