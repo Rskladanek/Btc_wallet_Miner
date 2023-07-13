@@ -10,11 +10,15 @@ import base58
 from bs4 import BeautifulSoup
 import json
 
+wallet_checked = 0
+wallets_with_balance = 0
+
 def get_balance(wallet_key):
     url = f'https://blockchain.info/balance?active={wallet_key.decode()}'
     response = requests.get(url)
     data = json.loads(response.text)
     final_balance = data.get(wallet_key.decode(), {}).get("final_balance", 0)
+    print(f" {data}", "Wallets checked ", wallet_checked, "wallets with ballance", wallets_with_balance)
     return final_balance
 
 # Generate Bitcoin wallet key
@@ -44,19 +48,15 @@ try:
     while True:
         # Generate a new wallet key and private key
         wallet_key, private_key = generate_btc_wallet_key()
-
-        print(f"Generated wallet key: {wallet_key.decode()}")  # Print the wallet key every time
-
-        # Use the API to check the balance
+        # Use the API to check the wallet_checkedbalance
         final_balance = get_balance(wallet_key)
-
+        wallet_checked +=1
         # If the balance is greater than zero, print and save to file
         if final_balance > 0:
             print(f"Wallet Key: {wallet_key.decode()}\nPrivate Key: {private_key}\nBalance: {final_balance}\n")
+            wallets_with_balance+=1
             with open(filename, "a") as f:
                 f.write(f"Wallet Key: {wallet_key.decode()}\nPrivate Key: {private_key}\nBalance: {final_balance}\n")
 
-        # Sleep for 60 seconds
-        time.sleep(10)
 except KeyboardInterrupt:
     print("Program interrupted. Exiting...")
